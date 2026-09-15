@@ -1,0 +1,9 @@
+spring:
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen2.5-coder:14b
+          temperature: 0.2
+          num-ctx: 8192
