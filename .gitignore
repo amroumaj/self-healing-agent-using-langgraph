@@ -1,0 +1,14 @@
+# Build output
+target/
+frontend/dist/
+frontend/.angular/
+
+# Dependencies
+frontend/node_modules/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
