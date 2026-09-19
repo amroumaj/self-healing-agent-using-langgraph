@@ -1,7 +1,9 @@
 package com.example.selfheal.config;
 
+import com.example.selfheal.agent.CodeGeneratorNode;
 import com.example.selfheal.agent.PlanNode;
 import com.example.selfheal.agent.SelfHealState;
+import com.example.selfheal.agent.TestGeneratorNode;
 import org.bsc.langgraph4j.CompiledGraph;
 import org.bsc.langgraph4j.StateGraph;
 import org.bsc.langgraph4j.action.AsyncNodeAction;
@@ -30,9 +32,13 @@ public class AgentConfig {
         StateGraph<SelfHealState> graph = new StateGraph<>(SelfHealState.schema(), SelfHealState::new);
 
         graph.addNode("plan", AsyncNodeAction.node_async(new PlanNode(chatClient)));
+        graph.addNode("generateTests", AsyncNodeAction.node_async(new TestGeneratorNode(chatClient)));
+        graph.addNode("generateCode", AsyncNodeAction.node_async(new CodeGeneratorNode(chatClient)));
 
         graph.addEdge(START, "plan");
-        graph.addEdge("plan", END);
+        graph.addEdge("plan", "generateTests");
+        graph.addEdge("generateTests", "generateCode");
+        graph.addEdge("generateCode", END);
 
         return graph.compile();
     }
