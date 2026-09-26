@@ -5,13 +5,18 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Service
 public class DockerExecutorService {
 
+    private static final long TIMEOUT_SECONDS = 90;
+    private static final String TIMEOUT_MESSAGE = "TIMEOUT: test execution exceeded 30 seconds";
+
     public String execute(String code, String tests) {
         Path tempDir = null;
+        Process process = null;
         try {
             tempDir = Files.createTempDirectory("selfheal-");
             Files.writeString(tempDir.resolve("solution.py"), code);
@@ -26,17 +31,36 @@ public class DockerExecutorService {
                     "pip install --quiet --disable-pip-version-check pytest >/dev/null 2>&1 && python -m pytest test_solution.py -v --tb=short");
             processBuilder.redirectErrorStream(true);
 
-            Process process = processBuilder.start();
+            process = processBuilder.start();
+
+            if (!process.waitFor(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                process.destroy();
+                return TIMEOUT_MESSAGE;
+            }
+
             String output = new String(process.getInputStream().readAllBytes());
 
             if (process.exitValue() == 0) {
                 return "";
             }
 
+            if (output.contains("Cannot connect to the Docker daemon")) {
+                throw new RuntimeException("Docker daemon is not running. Start Docker and try again.");
+            }
+            if (output.contains("No such image") || output.contains("pull access denied")) {
+                throw new RuntimeException("python:3.12 image not found. Run: docker pull python:3.12");
+            }
+
             return output;
         } catch (IOException e) {
             throw new RuntimeException("Failed to execute tests in Docker", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Test execution interrupted", e);
         } finally {
+            if (process != null) {
+                process.destroyForcibly();
+            }
             deleteRecursively(tempDir);
         }
     }
