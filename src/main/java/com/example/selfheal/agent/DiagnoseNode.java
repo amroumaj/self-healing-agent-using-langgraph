@@ -43,6 +43,6 @@ public class DiagnoseNode implements NodeAction<SelfHealState> {
                 .call()
                 .content();
 
-        return Map.of(SelfHealState.DIAGNOSIS, response);
+        return Map.of(SelfHealState.DIAGNOSIS, response.trim());
     }
 }
