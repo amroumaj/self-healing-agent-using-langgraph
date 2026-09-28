@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class DockerExecutorService {
 
     private static final long TIMEOUT_SECONDS = 90;
-    private static final String TIMEOUT_MESSAGE = "TIMEOUT: test execution exceeded 30 seconds";
+    private static final String TIMEOUT_MESSAGE = "TIMEOUT: test execution exceeded " + TIMEOUT_SECONDS + " seconds";
 
     public String execute(String code, String tests) {
         Path tempDir = null;
@@ -31,7 +31,7 @@ public class DockerExecutorService {
                     "pip install --quiet --disable-pip-version-check pytest >/dev/null 2>&1 && python -m pytest test_solution.py -v --tb=short");
             processBuilder.redirectErrorStream(true);
 
-            process = processBuilder.start();
+            process = start(processBuilder);
 
             if (!process.waitFor(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
                 process.destroy();
@@ -63,6 +63,10 @@ public class DockerExecutorService {
             }
             deleteRecursively(tempDir);
         }
+    }
+
+    Process start(ProcessBuilder processBuilder) throws IOException {
+        return processBuilder.start();
     }
 
     private void deleteRecursively(Path directory) {
