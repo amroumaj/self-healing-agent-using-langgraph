@@ -4,6 +4,6 @@ spring:
       base-url: http://localhost:11434
       chat:
         options:
-          model: qwen2.5-coder:14b
+          model: qwen2.5-coder:7b
           temperature: 0.2
           num-ctx: 8192
