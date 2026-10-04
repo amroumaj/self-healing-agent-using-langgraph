@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --border: #262b36;
+  --text: #d6dbe4;
+  --muted: #8b93a3;
+  --accent: #22d3ee;
+  --green: #4ade80;
+  --red: #f87171;
+  --yellow: #facc15;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+textarea {
+  font: inherit;
+}

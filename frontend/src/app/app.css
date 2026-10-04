@@ -1,0 +1,215 @@
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+header h1 {
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.controls textarea {
+  flex: 1;
+  resize: vertical;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.controls textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.controls button {
+  align-self: stretch;
+  background: var(--accent);
+  color: #06121c;
+  border: none;
+  border-radius: 8px;
+  padding: 0 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.phase-ticker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.phase-ticker.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.phase-ticker.active .pulse {
+  background: var(--accent);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid var(--red);
+  border-radius: 8px;
+  color: var(--red);
+  font-size: 0.85rem;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.result.ok {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+
+.result.fail {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid var(--red);
+  color: var(--red);
+}
+
+.steps {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.steps details {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+}
+
+.steps details.step-ok {
+  border-color: var(--green);
+}
+
+.steps details.step-fail {
+  border-color: var(--red);
+}
+
+.steps summary {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.attempt {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.node {
+  color: var(--yellow);
+  min-width: 6.5rem;
+}
+
+.phase {
+  color: var(--text);
+}
+
+.state {
+  margin-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+}
+
+.state h4 {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  margin: 0.6rem 0 0.3rem;
+}
+
+.state pre,
+.final-code pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.state pre.failure {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.final-code {
+  margin-top: 1.5rem;
+}
+
+.final-code h3 {
+  color: var(--green);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
