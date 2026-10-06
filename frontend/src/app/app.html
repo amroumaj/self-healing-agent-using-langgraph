@@ -1,0 +1,79 @@
+<main>
+  <header>
+    <h1>self-heal agent</h1>
+    <p>qwen2.5-coder &middot; langgraph4j &middot; docker sandbox &middot; ollama</p>
+  </header>
+
+  <section class="controls">
+    <textarea
+      [(ngModel)]="task"
+      name="task"
+      rows="4"
+      [disabled]="running()"
+      placeholder="e.g. Implement a thread-safe LRU cache with get, put, size, clear, eviction at capacity, and a hits counter."
+    ></textarea>
+    <button (click)="run()" [disabled]="running() || !task().trim()">
+      {{ running() ? 'running…' : '▶ run agent' }}
+    </button>
+  </section>
+
+  <section class="phase-ticker" [class.active]="currentPhase() !== ''">
+    <span class="pulse" aria-hidden="true"></span>
+    <span>{{ currentPhase() || 'idle — enter a task above' }}</span>
+  </section>
+
+  @if (error()) {
+    <section class="error">✗ {{ error() }}</section>
+  }
+
+  @if (result(); as res) {
+    <section class="result" [class.ok]="res.success" [class.fail]="!res.success">
+      <span class="icon">{{ res.success ? '✓' : '✗' }}</span>
+      <span>{{ res.success ? 'success' : 'failed' }} after {{ res.attempts }} attempt(s)</span>
+    </section>
+  }
+
+  <section class="steps">
+    @for (step of steps(); track $index) {
+      <details
+        [class.step-ok]="isExecuteOk(step)"
+        [class.step-fail]="isExecuteFail(step)"
+      >
+        <summary>
+          <span class="attempt">#{{ step.attempt }}</span>
+          <span class="node">{{ step.node }}</span>
+          <span class="phase">{{ step.phase }}</span>
+        </summary>
+        <div class="state">
+          @if (hasKey(step, 'plan')) {
+            <h4>plan</h4>
+            <pre><code>{{ step.state['plan'] }}</code></pre>
+          }
+          @if (hasKey(step, 'tests')) {
+            <h4>tests</h4>
+            <pre><code>{{ step.state['tests'] }}</code></pre>
+          }
+          @if (hasKey(step, 'code')) {
+            <h4>code</h4>
+            <pre><code>{{ step.state['code'] }}</code></pre>
+          }
+          @if (hasKey(step, 'diagnosis')) {
+            <h4>diagnosis</h4>
+            <pre><code>{{ step.state['diagnosis'] }}</code></pre>
+          }
+          @if (hasKey(step, 'failureOutput')) {
+            <h4>failure output</h4>
+            <pre class="failure"><code>{{ step.state['failureOutput'] }}</code></pre>
+          }
+        </div>
+      </details>
+    }
+  </section>
+
+  @if (result(); as res) {
+    <section class="final-code">
+      <h3>final code</h3>
+      <pre><code>{{ res.code }}</code></pre>
+    </section>
+  }
+</main>
