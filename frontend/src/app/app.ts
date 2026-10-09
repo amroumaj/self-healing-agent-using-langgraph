@@ -21,8 +21,10 @@ export class App {
   protected readonly steps = signal<AgentNodeEvent[]>([]);
   protected readonly result = signal<AgentResultEvent | null>(null);
   protected readonly error = signal('');
+  protected readonly copied = signal(false);
 
   private abort?: AbortController;
+  private copyTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private readonly agent: AgentService) {}
 
@@ -67,5 +69,13 @@ export class App {
 
   protected hasKey(step: AgentNodeEvent, key: string): boolean {
     return !!step.state[key];
+  }
+
+  protected copy(text: string): void {
+    if (!text) return;
+    this.copied.set(true);
+    clearTimeout(this.copyTimer);
+    this.copyTimer = setTimeout(() => this.copied.set(false), 1600);
+    navigator.clipboard?.writeText(text).catch(() => undefined);
   }
 }

@@ -94,6 +94,9 @@
     <section class="final-code" [class.ok]="res.success">
       <div class="final-head">
         <h3>final code</h3>
+        <button type="button" class="copy" (click)="copy(res.code)">
+          {{ copied() ? 'copied ✓' : 'copy' }}
+        </button>
       </div>
       <pre><code>{{ res.code }}</code></pre>
     </section>
