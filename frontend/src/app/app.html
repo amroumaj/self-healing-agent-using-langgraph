@@ -1,29 +1,47 @@
 <main>
-  <header>
-    <h1>self-heal agent</h1>
-    <p>qwen2.5-coder &middot; langgraph4j &middot; docker sandbox &middot; ollama</p>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div class="brand-text">
+        <h1>self-heal agent</h1>
+        <p>autonomous plan &rarr; test &rarr; code &rarr; debug loop</p>
+      </div>
+    </div>
+    <ul class="stack">
+      <li>qwen2.5-coder</li>
+      <li>langgraph4j</li>
+      <li>docker sandbox</li>
+      <li>ollama</li>
+    </ul>
   </header>
 
   <section class="controls">
-    <textarea
-      [(ngModel)]="task"
-      name="task"
-      rows="4"
-      [disabled]="running()"
-      placeholder="e.g. Implement a thread-safe LRU cache with get, put, size, clear, eviction at capacity, and a hits counter."
-    ></textarea>
-    <button (click)="run()" [disabled]="running() || !task().trim()">
-      {{ running() ? 'running…' : '▶ run agent' }}
+    <label class="field">
+      <span class="field-label">task</span>
+      <textarea
+        [(ngModel)]="task"
+        name="task"
+        rows="4"
+        [disabled]="running()"
+        placeholder="e.g. Implement a thread-safe LRU cache with get, put, size, clear, eviction at capacity, and a hits counter."
+      ></textarea>
+    </label>
+    <button class="run" (click)="run()" [disabled]="running() || !task().trim()">
+      <span class="run-icon" aria-hidden="true">{{ running() ? '◍' : '▶' }}</span>
+      {{ running() ? 'running…' : 'run agent' }}
     </button>
   </section>
 
   <section class="phase-ticker" [class.active]="currentPhase() !== ''">
     <span class="pulse" aria-hidden="true"></span>
-    <span>{{ currentPhase() || 'idle — enter a task above' }}</span>
+    <span class="phase-text">{{ currentPhase() || 'idle — enter a task above' }}</span>
   </section>
 
   @if (error()) {
-    <section class="error">✗ {{ error() }}</section>
+    <section class="error">
+      <span class="error-icon" aria-hidden="true">✗</span>
+      {{ error() }}
+    </section>
   }
 
   @if (result(); as res) {
@@ -36,6 +54,7 @@
   <section class="steps">
     @for (step of steps(); track $index) {
       <details
+        class="step"
         [class.step-ok]="isExecuteOk(step)"
         [class.step-fail]="isExecuteFail(step)"
       >
@@ -43,6 +62,7 @@
           <span class="attempt">#{{ step.attempt }}</span>
           <span class="node">{{ step.node }}</span>
           <span class="phase">{{ step.phase }}</span>
+          <span class="chevron" aria-hidden="true"></span>
         </summary>
         <div class="state">
           @if (hasKey(step, 'plan')) {
@@ -71,8 +91,10 @@
   </section>
 
   @if (result(); as res) {
-    <section class="final-code">
-      <h3>final code</h3>
+    <section class="final-code" [class.ok]="res.success">
+      <div class="final-head">
+        <h3>final code</h3>
+      </div>
       <pre><code>{{ res.code }}</code></pre>
     </section>
   }
