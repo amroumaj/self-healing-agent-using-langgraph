@@ -529,3 +529,33 @@ main {
   border-radius: 0;
   background: transparent;
 }
+
+/* ---------- responsive / motion ---------- */
+@media (max-width: 640px) {
+  main {
+    padding: 1.6rem 1rem 3rem;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .controls button.run {
+    justify-content: center;
+    padding: 0.9rem 1rem;
+  }
+
+  .node {
+    min-width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
