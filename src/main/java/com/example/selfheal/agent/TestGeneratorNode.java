@@ -15,7 +15,8 @@ public class TestGeneratorNode implements NodeAction<SelfHealState> {
             "Write pytest test cases for the following functions.\n\nPlan:\n%s\n\n" +
             "Rules:\n" +
             "- Import as: from solution import <function_name>\n" +
-            "- Cover the basic behaviour and the main edge cases\n" +
+            "- At least 2 basic tests and 2 edge case tests per function\n" +
+            "- Tests must be self-contained (no external files, no network calls)\n" +
             "- Use plain assert statements\n" +
             "- Output the complete test file in one code block";
 
