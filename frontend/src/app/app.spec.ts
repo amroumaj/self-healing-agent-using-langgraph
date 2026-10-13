@@ -13,5 +13,7 @@ describe('App', () => {
     fixture.detectChanges();
     const el: HTMLElement = fixture.nativeElement;
     expect(el.querySelector('h1')?.textContent).toContain('self-heal agent');
+    const button = el.querySelector('button') as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
   });
 });
