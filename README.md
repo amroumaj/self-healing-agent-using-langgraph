@@ -75,6 +75,17 @@ The agent is a state machine built with LangGraph4j (`StateGraph<SelfHealState>`
 }
 ```
 
+### Streaming
+`POST /agent/run/stream` returns `text/event-stream` so you can watch the agent think in real time:
+
+```
+curl -N -X POST http://localhost:8080/agent/run/stream \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Implement fibonacci"}'
+```
+
+Each step emits an `event:node` frame with the node id, a human-readable `phase` (e.g. `"Planning the implementation"`, `"Generating code (attempt 2)"`), the attempt number, and a full state snapshot (`plan`, `tests`, `code`, `failureOutput`, ...), followed by a final `event:result` frame with the same payload as `/agent/run`, or an `event:error` frame on failure.
+
 ## Clients
 
 Two interactive ways to watch the agent work:
